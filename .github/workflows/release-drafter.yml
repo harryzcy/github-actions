@@ -1,15 +1,7 @@
 name: Release Drafter
 
 on:
-  push:
-    branches:
-      - main
-    tags-ignore:
-      - 'v*'
-  pull_request:
-    types: [opened, reopened, synchronize]
-  pull_request_target:
-    types: [opened, reopened, synchronize]
+  workflow_call:
 
 permissions:
   contents: read
