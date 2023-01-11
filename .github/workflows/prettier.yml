@@ -8,36 +8,10 @@ on:
         required: false
         type: string
         default: .
-      package-manager:
-        description: "Package manager"
-        required: false
-        type: string
-        default: pnpm
 
 jobs:
-  prettier-npm:
+  prettier:
     runs-on: ubuntu-latest
-    if: ${{ inputs.package-manager == 'npm' }}
-    defaults:
-      run:
-        working-directory: ${{ inputs.working-directory }}
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run prettier
-        run: |
-          npx prettier --config .prettierrc 'src/**/*.{ts,tsx}' --check
-
-  prettier-pnpm:
-    runs-on: ubuntu-latest
-    if: ${{ inputs.package-manager == 'pnpm' }}
     defaults:
       run:
         working-directory: ${{ inputs.working-directory }}
