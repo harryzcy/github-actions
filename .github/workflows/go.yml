@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       working-directory:
-        description: 'Working directory'
+        description: "Working directory"
         required: false
         type: string
         default: .
@@ -14,26 +14,26 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        go-version: ['1.19', '1.20']
+        go-version: ["1.19", "1.20"]
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set up Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: ${{ matrix.go-version }}
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go-version }}
 
-    - name: Build
-      working-directory: ${{ inputs.working-directory }}
-      run: go build -v ./...
-
-    - name: Test with coverage
-      working-directory: ${{ inputs.working-directory }}
-      run: go test $(go list ./... | grep -v /integration) -race -coverprofile=coverage.txt -covermode=atomic
-    
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
+      - name: Build
         working-directory: ${{ inputs.working-directory }}
-        file: ./coverage.txt
+        run: go build -v ./...
+
+      - name: Test with coverage
+        working-directory: ${{ inputs.working-directory }}
+        run: go test $(go list ./... | grep -v /integration) -race -coverprofile=coverage.txt -covermode=atomic
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          working-directory: ${{ inputs.working-directory }}
+          file: ./coverage.txt
