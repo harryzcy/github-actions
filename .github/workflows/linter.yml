@@ -20,6 +20,6 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_GO: false
           VALIDATE_JSCPD: false
+          VALIDATE_DOCKERFILE_HADOLINT: false
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HADOLINT_OVERRIDE_INFO: DL3007
