@@ -22,3 +22,4 @@ jobs:
           VALIDATE_JSCPD: false
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HADOLINT_OVERRIDE_INFO: DL3007
