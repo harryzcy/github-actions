@@ -24,5 +24,6 @@ jobs:
           VALIDATE_RUST_2015: false
           VALIDATE_RUST_2018: false
           VALIDATE_RUST_CLIPPY: false
+          VALIDATE_TYPESCRIPT_STANDARD: false # related https://github.com/super-linter/super-linter/issues/4445
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
