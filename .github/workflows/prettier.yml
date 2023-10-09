@@ -28,4 +28,8 @@ jobs:
 
       - name: Run prettier
         run: |
-          npx prettier --config .prettierrc 'src/**/*.{ts,tsx}' --check
+          if [ -f ".prettierrc" ]; then
+            npx prettier --config .prettierrc 'src/**/*.{ts,tsx}' --check
+          else
+            npx prettier 'src/**/*.{ts,tsx}' --check
+          fi
