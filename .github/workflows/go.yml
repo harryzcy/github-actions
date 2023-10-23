@@ -8,13 +8,32 @@ on:
         required: false
         type: string
         default: .
+      latest:
+        description: "Number of latest Go versions"
+        required: false
+        type: number
+        default: 2
 
 jobs:
+  set-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      go-version: ${{ steps.go-version.outputs.go-version }}
+    steps:
+      - id: go-versions
+        run: |
+          if [ "${{ github.event.inputs.latest }}" == "1" ]; then
+            echo "go-version=[\"1.21\"]" >> $GITHUB_OUTPUT
+          else
+            echo "go-version=[\"1.20\", \"1.21\"]" >> $GITHUB_OUTPUT
+          fi
+
   unit-test:
+    needs: set-matrix
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        go-version: ["1.20", "1.21"]
+        go-version: ${{ fromJSON(needs.set-matrix.outputs.go-version) }}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
