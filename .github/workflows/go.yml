@@ -51,7 +51,9 @@ jobs:
 
       - name: Test with coverage
         working-directory: ${{ inputs.working-directory }}
-        run: go test $(go list ./... | grep -v /integration) -race -coverprofile=coverage.txt -covermode=atomic
+        run: |
+          readarray -t packages < <(go list ./... | grep -v /integration)
+          go test "${packages[@]}" -race -coverprofile=coverage.txt -covermode=atomic
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
