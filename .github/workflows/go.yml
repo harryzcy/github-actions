@@ -52,6 +52,7 @@ jobs:
       - name: Test with coverage
         working-directory: ${{ inputs.working-directory }}
         run: |
+          # shellcheck disable=SC2046
           go test $(go list ./... | grep -v /integration) -race -coverprofile=coverage.txt -covermode=atomic
 
       - name: Upload coverage to Codecov
