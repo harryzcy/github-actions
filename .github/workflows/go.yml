@@ -37,7 +37,8 @@ jobs:
         go-version: ${{ fromJSON(needs.set-matrix.outputs.go-version) }}
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Go
         uses: actions/setup-go@v4
