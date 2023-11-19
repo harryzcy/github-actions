@@ -43,7 +43,7 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go-version }}
-          cache: false
+          check-latest: true
 
       - name: Build
         working-directory: ${{ inputs.working-directory }}
