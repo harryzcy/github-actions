@@ -45,6 +45,7 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
           check-latest: true
+          cache-dependency-path: ${{ inputs.working-directory }}/go.sum
 
       - name: Build
         working-directory: ${{ inputs.working-directory }}
