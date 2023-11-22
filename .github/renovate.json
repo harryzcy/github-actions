@@ -1,4 +1,10 @@
 {
-  "extends": ["config:base", ":disableDependencyDashboard", ":automergeMinor"],
-  "labels": ["dependencies"]
+  "extends": [
+    "config:base",
+    ":disableDependencyDashboard",
+    ":automergeMinor"
+  ],
+  "labels": [
+    "dependencies"
+  ]
 }
