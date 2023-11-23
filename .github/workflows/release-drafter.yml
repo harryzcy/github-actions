@@ -6,6 +6,7 @@ on:
 jobs:
   update:
     name: Update
+    if: github.repository_owner == 'harryzcy'
     permissions:
       contents: write
       pull-requests: write
