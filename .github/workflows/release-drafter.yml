@@ -12,7 +12,6 @@ jobs:
       pull-requests: write
     concurrency:
       group: ci-release-drafter
-      cancel-in-progress: true
     runs-on: ubuntu-latest
     steps:
       - name: Run release-drafter
