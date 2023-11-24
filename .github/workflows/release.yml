@@ -6,7 +6,7 @@ on:
       tag_name:
         type: string
         description: "The tag name of the release"
-        required: true
+        required: false
         default: ${{ github.ref_name }}
 
 jobs:
