@@ -31,8 +31,16 @@ jobs:
 
       - name: Run prettier
         run: |
-          if [ -f ".prettierrc" ]; then
-            npx prettier --config .prettierrc 'src/**/*.{ts,tsx,js,vue,html}' --check
+          if [ -d "src" ]; then
+            dir="src"
+          elif [ -d "app" ]; then
+            dir="app"
           else
-            npx prettier 'src/**/*.{ts,tsx,js,vue,html}' --check
+            dir="."
+          fi
+
+          if [ -f ".prettierrc" ]; then
+            npx prettier --config .prettierrc "${dir}/**/*.{ts,tsx,js,vue,html}" --check
+          else
+            npx prettier "${dir}/**/*.{ts,tsx,js,vue,html}" --check
           fi
