@@ -4,6 +4,12 @@ on:
   push:
   pull_request:
   workflow_call:
+    inputs:
+      check-all:
+        description: "Check entire codebase"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -22,7 +28,7 @@ jobs:
       - name: Lint Code Base
         uses: super-linter/super-linter@f5150a3ce82fe45ad2d9f1e92ac6fc2c9b7c14a5 # v6.1.1
         env:
-          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_ALL_CODEBASE: ${{ inputs.check-all }}
           VALIDATE_GO: false
           VALIDATE_JSCPD: false
           VALIDATE_DOCKERFILE_HADOLINT: false
