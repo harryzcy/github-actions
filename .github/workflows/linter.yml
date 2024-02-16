@@ -17,7 +17,7 @@ jobs:
           fetch-depth: 0
 
       - name: Lint Code Base
-        uses: super-linter/super-linter@a8150b40c89574adb5f68bf9502b890a236a06b3 # v5
+        uses: super-linter/super-linter@f5150a3ce82fe45ad2d9f1e92ac6fc2c9b7c14a5 # v6
         env:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_GO: false
