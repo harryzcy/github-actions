@@ -3,6 +3,9 @@ name: Release Drafter
 on:
   workflow_call:
 
+permissions:
+  contents: read
+
 jobs:
   update:
     name: Update
