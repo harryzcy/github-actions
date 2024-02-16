@@ -9,6 +9,9 @@ on:
         required: false
         default: ${{ github.ref_name }}
 
+permissions:
+  contents: read
+
 jobs:
   release:
     name: Release on GitHub
