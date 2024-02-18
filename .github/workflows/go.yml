@@ -36,7 +36,7 @@ jobs:
     needs: set-matrix
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-14]
         go-version: ${{ fromJSON(needs.set-matrix.outputs.go-version) }}
     runs-on: ${{ matrix.os }}
     steps:
