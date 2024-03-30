@@ -10,6 +10,11 @@ on:
         required: false
         type: boolean
         default: true
+      harden-runner:
+        description: "Harden runner"
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -20,6 +25,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+        if: ${{ github.event_name != 'workflow_call' || inputs.harden-runner }}
+        with:
+          egress-policy: audit
+
       - name: Checkout Code
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:

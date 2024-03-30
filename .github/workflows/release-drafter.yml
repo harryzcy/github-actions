@@ -2,6 +2,12 @@ name: Release Drafter
 
 on:
   workflow_call:
+    inputs:
+      harden-runner:
+        description: "Harden runner"
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -17,6 +23,11 @@ jobs:
       group: ci-release-drafter
     runs-on: ubuntu-latest
     steps:
+      - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+        if: ${{ inputs.harden-runner }}
+        with:
+          egress-policy: audit
+
       - name: Run release-drafter
         uses: release-drafter/release-drafter@3f0f87098bd6b5c5b9a36d49c41d998ea58f9348 # v6.0.0
         with:
