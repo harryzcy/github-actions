@@ -13,6 +13,11 @@ on:
         required: false
         type: number
         default: 2
+      harden-runner:
+        description: "Harden runner"
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -40,6 +45,11 @@ jobs:
         go-version: ${{ fromJSON(needs.set-matrix.outputs.go-version) }}
     runs-on: ${{ matrix.os }}
     steps:
+      - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+        if: ${{ inputs.harden-runner }}
+        with:
+          egress-policy: audit
+
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
