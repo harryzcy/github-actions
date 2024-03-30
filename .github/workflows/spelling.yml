@@ -1,6 +1,8 @@
 name: Check Spelling
 
 on:
+  push:
+  pull_request:
   workflow_call:
     inputs:
       harden-runner:
@@ -17,10 +19,15 @@ jobs:
     name: Spell Check
     runs-on: ubuntu-latest
     steps:
-      - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
-        if: ${{ inputs.harden-runner }}
+      - name: Harden Runner
+        uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+        if: ${{ inputs.harden-runner || github.event_name != 'workflow_call' }}
         with:
-          egress-policy: audit
+          disable-sudo: true
+          egress-policy: block
+          allowed-endpoints: >
+            github.com:443
+            objects.githubusercontent.com:443
 
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
