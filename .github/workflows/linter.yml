@@ -29,13 +29,7 @@ jobs:
         if: ${{ github.event_name != 'workflow_call' || inputs.harden-runner }}
         with:
           disable-sudo: true
-          egress-policy: block
-          allowed-endpoints: >
-            api.github.com:443
-            api0.prismacloud.io:443
-            github.com:443
-            proxy.golang.org:443
-            pypi.org:443
+          egress-policy: audit
 
       - name: Checkout Code
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
