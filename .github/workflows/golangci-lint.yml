@@ -56,3 +56,4 @@ jobs:
           version: latest
           args: --timeout 5m
           working-directory: ${{ inputs.working-directory }}
+          skip-cahce: ${{ !inputs.cache }}
