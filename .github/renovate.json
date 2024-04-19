@@ -1,14 +1,5 @@
 {
   "extends": [
-    "config:best-practices",
-    ":pinDependencies",
-    ":disableDependencyDashboard",
-    ":automergeMinor"
-  ],
-  "labels": [
-    "dependencies"
-  ],
-  "digest": {
-    "automerge": true
-  }
+    "github>harryzcy/renovate-config"
+  ]
 }
