@@ -21,7 +21,7 @@ jobs:
       pull-requests: write
     concurrency:
       group: ci-release-drafter
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
         if: ${{ inputs.harden-runner }}
