@@ -75,3 +75,4 @@ jobs:
         with:
           working-directory: ${{ inputs.working-directory }}
           file: ./coverage.txt
+          use_oidc: true
