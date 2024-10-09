@@ -21,6 +21,7 @@ jobs:
       pull-requests: write
     concurrency:
       group: ci-release-drafter
+      cancel-in-progress: false
     runs-on: ubuntu-24.04
     steps:
       - uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
