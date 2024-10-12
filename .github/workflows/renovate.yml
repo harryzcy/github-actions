@@ -1,0 +1,33 @@
+name: Renovate Config
+
+on:
+  push:
+  pull_request:
+  workflow_call:
+    inputs:
+      harden-runner:
+        description: "Harden runner"
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  renovate:
+    name: Renovate Config
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
+        if: ${{ inputs.harden-runner }}
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+
+      - name: Check Renovate Config Syntax
+        run: |
+          npx --yes --package renovate -- renovate-config-validator --strict
