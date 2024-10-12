@@ -1,4 +1,4 @@
-name: Lint
+name: Renovate Config
 
 on:
   push:
@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   renovate:
-    name: Check Renovate Config Syntax
+    name: Renovate Config
     runs-on: ubuntu-24.04
     steps:
       - name: Harden Runner
