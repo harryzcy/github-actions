@@ -24,6 +24,7 @@ permissions:
 
 jobs:
   set-matrix:
+    name: Set Go Version Matrix
     runs-on: ubuntu-24.04
     outputs:
       go-version: ${{ steps.go-version.outputs.go-version }}
@@ -38,10 +39,17 @@ jobs:
           fi
 
   unit-test:
+    name: Unit Tests
     needs: set-matrix
     strategy:
       matrix:
-        os: [ubuntu-22.04, ubuntu-24.04, macos-14, macos-15]
+        os:
+          - ubuntu-22.04
+          - ubuntu-22.04-arm
+          - ubuntu-24.04
+          - ubuntu-24.04-arm
+          - macos-14
+          - macos-15
         go-version: ${{ fromJSON(needs.set-matrix.outputs.go-version) }}
     runs-on: ${{ matrix.os }}
     permissions:
