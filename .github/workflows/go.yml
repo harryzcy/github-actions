@@ -33,9 +33,9 @@ jobs:
         id: go-version
         run: |
           if [ "${{ inputs.latest }}" == "1" ]; then
-            echo "go-version=[\"1.23\"]" >> "$GITHUB_OUTPUT"
+            echo "go-version=[\"1.24\"]" >> "$GITHUB_OUTPUT"
           else
-            echo "go-version=[\"1.22\", \"1.23\"]" >> "$GITHUB_OUTPUT"
+            echo "go-version=[\"1.23\", \"1.24\"]" >> "$GITHUB_OUTPUT"
           fi
 
   unit-test:
