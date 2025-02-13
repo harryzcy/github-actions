@@ -32,10 +32,13 @@ jobs:
       - name: Determine Go versions
         id: go-version
         run: |
+          latest_version="$(curl -s 'https://go.dev/VERSION?m=text' | head -n 1 | grep -oP 'go[0-9]+\.[0-9]+' | sed 's/go//')"
+          major=$(echo "$latest_version" | cut -d. -f1)
+          minor=$(echo "$latest_version" | cut -d. -f2)
           if [ "${{ inputs.latest }}" == "1" ]; then
-            echo "go-version=[\"1.24\"]" >> "$GITHUB_OUTPUT"
+            echo "go-version=[\"${major}.${minor}\"]" >> "$GITHUB_OUTPUT"
           else
-            echo "go-version=[\"1.23\", \"1.24\"]" >> "$GITHUB_OUTPUT"
+            echo "go-version=[\"${major}.$((minor - 1))\", \"${major}.${minor}\"]" >> "$GITHUB_OUTPUT"
           fi
 
   unit-test:
