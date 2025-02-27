@@ -6,14 +6,14 @@
     {
       "customType": "regex",
       "fileMatch": [
-        ".github/workflows/.*\\.yml",
-        ".github/workflows/.*\\.yaml"
+        "^\\.github\\/workflows\\/.*\\.ya?ml$"
       ],
       "matchStrings": [
-        "node-version: ['\"]?(?<currentValue>.*)['\"]?"
+        "node-version: '(?<currentValue>.+?)'"
       ],
       "depNameTemplate": "node",
-      "datasourceTemplate": "node-version"
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
     }
   ]
 }
