@@ -1,5 +1,19 @@
 {
   "extends": [
     "github>harryzcy/renovate-config"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        ".github/workflows/.*\\.yml",
+        ".github/workflows/.*\\.yaml"
+      ],
+      "matchStrings": [
+        "node-version: ['\"]?(?<currentValue>.*)['\"]?"
+      ],
+      "depNameTemplate": "node",
+      "datasourceTemplate": "node-version"
+    }
   ]
 }
