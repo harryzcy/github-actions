@@ -24,7 +24,7 @@ jobs:
     name: Determine changed files
     runs-on: ubuntu-24.04
     outputs:
-      use_slim: ${{ steps.changed-files-yaml.outputs.any_changed == 'true' }}
+      use_slim: ${{ steps.determine.outputs.any_changed == 'true' }}
     steps:
       - uses: step-security/harden-runner@4d991eb9b905ef189e4c376166672c3f2f230481 # v2.11.0
         if: ${{ github.event_name != 'workflow_call' || inputs.harden-runner }}
@@ -41,15 +41,14 @@ jobs:
         id: determine
         uses: tj-actions/changed-files@v45.0.7
         with:
-          files_yaml: |
-            rust:
-              - "**.rs"
-              - "Cargo.toml"
-              - "Cargo.lock"
-            dotnet:
-              - "**.cs"
-              - "**.csproj"
-              - "**.sln"
+          files: |
+            "**.rs"
+            "Cargo.toml"
+            "Cargo.lock"
+            "**.cs"
+            "**.csproj"
+            "**.sln"
+
       - name: Print info
         run: |
           echo "use_slim: ${{ steps.determine.outputs.any_changed }}"
