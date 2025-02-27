@@ -2,6 +2,14 @@
   "extends": [
     "github>harryzcy/renovate-config"
   ],
+  "packageRules": [
+    {
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "automerge": false
+    }
+  ],
   "customManagers": [
     {
       "customType": "regex",
