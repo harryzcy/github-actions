@@ -50,6 +50,9 @@ jobs:
               - "**.cs"
               - "**.csproj"
               - "**.sln"
+      - name: Print info
+        run: |
+          echo "use_slim: ${{ steps.determine.outputs.any_changed }}"
 
   linter:
     name: Lint Code Base
