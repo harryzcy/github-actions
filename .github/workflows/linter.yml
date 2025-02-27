@@ -20,10 +20,11 @@ permissions:
   contents: read
 
 jobs:
-  linter:
-    name: Lint Code Base
+  determine:
+    name: Determine changed files
     runs-on: ubuntu-24.04
-
+    outputs:
+      use_full: ${{ steps.determine.outputs.any_changed == 'true' }}
     steps:
       - uses: step-security/harden-runner@4d991eb9b905ef189e4c376166672c3f2f230481 # v2.11.0
         if: ${{ github.event_name != 'workflow_call' || inputs.harden-runner }}
@@ -36,8 +37,73 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Lint Code Base
+      - name: Determine changed files
+        id: determine
+        uses: tj-actions/changed-files@v45.0.7
+        with:
+          files: |
+            "**.rs"
+            "Cargo.toml"
+            "Cargo.lock"
+            "**.cs"
+            "**.csproj"
+            "**.sln"
+
+      - name: Print info
+        run: |
+          echo "use_full: ${{ steps.determine.outputs.any_changed }}"
+
+  linter:
+    name: Lint Code Base
+    runs-on: ubuntu-24.04
+    if: ${{ needs.determine.outputs.use_full == 'true' || inputs.check-all }}
+    needs: determine
+    steps:
+      - uses: step-security/harden-runner@4d991eb9b905ef189e4c376166672c3f2f230481 # v2.11.0
+        if: ${{ github.event_name != 'workflow_call' || inputs.harden-runner }}
+        with:
+          disable-sudo: true
+          egress-policy: audit
+
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Lint codebase - full
         uses: super-linter/super-linter@4e8a7c2bf106c4c766c816b35ec612638dc9b6b2 # v7.3.0
+        env:
+          VALIDATE_ALL_CODEBASE: ${{ inputs.check-all }}
+          VALIDATE_GO: false
+          VALIDATE_JSCPD: false
+          VALIDATE_DOCKERFILE_HADOLINT: false
+          VALIDATE_RUST_2015: false
+          VALIDATE_RUST_2018: false
+          VALIDATE_RUST_CLIPPY: false
+          VALIDATE_TYPESCRIPT_STANDARD: false # related https://github.com/super-linter/super-linter/issues/4445
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FILTER_REGEX_INCLUDE: ".*go.mod"
+
+  linter-slim:
+    name: Lint Code Base
+    runs-on: ubuntu-24.04
+    if: ${{ needs.determine.outputs.use_full == 'false' && !inputs.check-all }}
+    needs: determine
+    steps:
+      - uses: step-security/harden-runner@4d991eb9b905ef189e4c376166672c3f2f230481 # v2.11.0
+        if: ${{ github.event_name != 'workflow_call' || inputs.harden-runner }}
+        with:
+          disable-sudo: true
+          egress-policy: audit
+
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Lint codebase - slim
+        uses: super-linter/super-linter/slim@4e8a7c2bf106c4c766c816b35ec612638dc9b6b2 # v7.3.0
         env:
           VALIDATE_ALL_CODEBASE: ${{ inputs.check-all }}
           VALIDATE_GO: false
