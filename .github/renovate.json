@@ -9,7 +9,7 @@
         "^\\.github\\/workflows\\/.*\\.ya?ml$"
       ],
       "matchStrings": [
-        "node-version: '(?<currentValue>.+?)'"
+        "node-version: ['\"]?(?<currentValue>.*)['\"]?"
       ],
       "depNameTemplate": "node",
       "datasourceTemplate": "docker",
