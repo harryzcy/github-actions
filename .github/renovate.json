@@ -21,7 +21,8 @@
       ],
       "depNameTemplate": "node",
       "datasourceTemplate": "docker",
-      "versioningTemplate": "regex:^(?<major>\\d+)$"
+      "versioningTemplate": "docker",
+      "extractVersionTemplate": "regex:^(?<major>\\d+)$"
     }
   ]
 }
