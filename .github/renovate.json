@@ -13,8 +13,7 @@
       ],
       "depNameTemplate": "node",
       "datasourceTemplate": "docker",
-      "versioningTemplate": "regex:^(?<major>\\d+)$",
-      "automerge": false
+      "versioningTemplate": "regex:^(?<major>\\d+)$"
     }
   ]
 }
