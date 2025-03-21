@@ -24,7 +24,7 @@ jobs:
     name: Determine changed files
     runs-on: ubuntu-24.04
     outputs:
-      use_full: ${{ steps.determine.outputs.any_changed == 'true' }}
+      use_full: ${{ steps.combine.outputs.any_changed == 'true' }}
     steps:
       - uses: step-security/harden-runner@4d991eb9b905ef189e4c376166672c3f2f230481 # v2.11.0
         if: ${{ github.event_name != 'workflow_call' || inputs.harden-runner }}
@@ -38,7 +38,7 @@ jobs:
           fetch-depth: 0
 
       - name: Determine changed files
-        id: determine
+        id: determine-changed
         uses: tj-actions/changed-files@2f7c5bfce28377bc069a65ba478de0a74aa0ca32 # v46.0.1
         with:
           files: |
@@ -49,9 +49,36 @@ jobs:
             "**.csproj"
             "**.sln"
 
-      - name: Print info
+      - name: Determine contained files
+        id: determine-contained
         run: |
-          echo "use_full: ${{ steps.determine.outputs.any_changed }}"
+          patterns=("*.rs" "Cargo.toml" "Cargo.lock" "*.cs" "*.csproj" "*.sln")
+          files=()
+          has_changes=false
+          for pattern in "${patterns[@]}"; do
+            if [ -n "$(find . -name "$pattern")" ]; then
+              files+=("$pattern")
+              has_changes=true
+            fi
+          done
+          if [ "${#files[@]}" -gt 0 ]; then
+            echo "any_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "any_changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Combine outputs
+        id: combine
+        run: |
+          if [ ${{ inputs.check-all }} == true ]; then
+            echo "Checking entire codebase"
+            echo "use_full: ${{ steps.determine-contained.outputs.any_changed }}"
+            echo "any_changed=${{ steps.determine-contained.outputs.any_changed }}" >> $GITHUB_OUTPUT
+          else
+            echo "Checking only changed files"
+            echo "use_full: ${{ steps.determine-changed.outputs.any_changed }}"
+            echo "any_changed=${{ steps.determine-changed.outputs.any_changed }}" >> $GITHUB_OUTPUT
+          fi
 
   linter:
     name: Lint Code Base
