@@ -70,7 +70,7 @@ jobs:
       - name: Combine outputs
         id: combine
         run: |
-          if [ ${{ inputs.check-all }} == true ]; then
+          if [[ "${{ inputs.check-all }}" == true ]]; then
             echo "Checking entire codebase"
             echo "use_full: ${{ steps.determine-contained.outputs.any_changed }}"
             echo "any_changed=${{ steps.determine-contained.outputs.any_changed }}" >> $GITHUB_OUTPUT
