@@ -28,6 +28,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
+      - name: Clean npx Cache
+        run: |
+          npm cache clean --force
+          npx clear-npx-cache
+
       - name: Check Renovate Config Syntax
         run: |
           npx --yes --package renovate -- renovate-config-validator --strict
