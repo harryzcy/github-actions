@@ -31,7 +31,8 @@ jobs:
       - name: Clean npx Cache
         run: |
           npm cache clean --force
-          npx clear-npx-cache
+          rm -rf ~/.npm/_npx
+          rm -rf ~/.npm/_cacache
 
       - name: Check Renovate Config Syntax
         run: |
