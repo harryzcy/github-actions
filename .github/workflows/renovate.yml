@@ -30,4 +30,4 @@ jobs:
 
       - name: Check Renovate Config Syntax
         run: |
-          npx --yes --package renovate -- renovate-config-validator --strict
+          npx --yes --package renovate@latest -- renovate-config-validator --strict
