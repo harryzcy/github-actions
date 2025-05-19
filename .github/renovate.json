@@ -22,7 +22,7 @@
       "depNameTemplate": "node",
       "datasourceTemplate": "docker",
       "versioningTemplate": "regex:^(?<major>\\d+)$",
-      "extractVersionTemplate": "regex:^(?<major>\\d+)$"
+      "extractVersionTemplate": "^(?<version>v\\d+)"
     }
   ]
 }
