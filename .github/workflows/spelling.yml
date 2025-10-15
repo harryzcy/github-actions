@@ -10,6 +10,10 @@ on:
         required: false
         type: boolean
         default: true
+      config:
+        description: "Path to typos config file"
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -35,3 +39,5 @@ jobs:
 
       - name: Check spelling
         uses: crate-ci/typos@80c8a4945eec0f6d464eaf9e65ed98ef085283d1 # v1.38.1
+        with:
+          config: ${{ inputs.config }}
