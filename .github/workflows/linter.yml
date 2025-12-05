@@ -132,6 +132,8 @@ jobs:
         uses: super-linter/super-linter/slim@502f4fe48a81a392756e173e39a861f8c8efe056 # v8.3.0
         env:
           VALIDATE_ALL_CODEBASE: ${{ inputs.check-all }}
+          VALIDATE_BIOME_FORMAT: false
+          VALIDATE_BIOME_LINT: false
           VALIDATE_GO: false
           VALIDATE_JSCPD: false
           VALIDATE_DOCKERFILE_HADOLINT: false
