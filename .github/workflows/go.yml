@@ -51,7 +51,6 @@ jobs:
           - ubuntu-22.04-arm
           - ubuntu-24.04
           - ubuntu-24.04-arm
-          - macos-14
           - macos-15
           - macos-26
         go-version: ${{ fromJSON(needs.set-matrix.outputs.go-version) }}
