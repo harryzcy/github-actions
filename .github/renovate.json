@@ -14,7 +14,7 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/^\\.github\\/workflows\\/.*\\.ya?ml$/"
+        "^\\.github\\/workflows\\/.*\\.ya?ml$"
       ],
       "matchStrings": [
         "node-version: ['\"]?(?<currentValue>.*)['\"]?"
