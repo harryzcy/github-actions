@@ -104,6 +104,7 @@ jobs:
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_BIOME_LINT: false
           VALIDATE_GO: false
+          VALIDATE_GO_MODULES: false
           VALIDATE_JSCPD: false
           VALIDATE_DOCKERFILE_HADOLINT: false
           VALIDATE_RUST_2015: false
@@ -137,6 +138,7 @@ jobs:
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_BIOME_LINT: false
           VALIDATE_GO: false
+          VALIDATE_GO_MODULES: false
           VALIDATE_JSCPD: false
           VALIDATE_DOCKERFILE_HADOLINT: false
           VALIDATE_RUST_2015: false
