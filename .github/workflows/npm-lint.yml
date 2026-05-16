@@ -56,12 +56,16 @@ jobs:
           if [ ! -f .npmrc ]; then
             echo ".npmrc file not found"
             exit 1
+          else
+            echo "✅ .npmrc file found"
           fi
 
           # Check if min-release-age line is present in npm config
           if ! grep -q "min-release-age" .npmrc; then
             echo "min-release-age setting is not present in npm config"
             exit 1
+          else
+            echo "✅ min-release-age setting found in npm config"
           fi
 
           # Check if min-release-age is set to greater than 0
@@ -69,6 +73,8 @@ jobs:
           if [ "$min_release_age" -le 0 ]; then
             echo "min-release-age setting is not set to greater than 0"
             exit 1
+          else
+            echo "✅ min-release-age setting is set to ${min_release_age}"
           fi
 
           # Check "before = date" exists
@@ -76,6 +82,8 @@ jobs:
           if [ -z "$before_date" ]; then
             echo "before setting is not present in npm config"
             exit 1
+          else
+            echo "✅ before setting found in npm config with value: ${before_date}"
           fi
 
       - name: Install dependencies
