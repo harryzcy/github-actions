@@ -38,6 +38,39 @@ jobs:
         with:
           node-version: 24
           check-latest: true
+      
+      # Ensure npm version is at least 11.10.0 for the `npm config get min-release-age` command
+      - name: Check npm version to be at least 11.10.0
+        run: |
+          npm_version=$(npm --version)
+          required_version="11.10.0"
+
+          if [ "$(printf '%s\n' "$required_version" "$npm_version" | sort -V | head -n1)" != "$required_version" ]; then
+            echo "npm version $npm_version is less than required version $required_version"
+            exit 1
+          fi
+
+      - name: Check min-release-age setting
+        run: |
+          # Check if min-release-age line is present in npm config
+          if ! grep -q "min-release-age" .npmrc; then
+            echo "min-release-age setting is not present in npm config"
+            exit 1
+          fi
+
+          # Check if min-release-age is set to greater than 0
+          min_release_age=$(cat .npmrc | grep "min-release-age" | awk -F= '{print $2}' | tr -d ' ')
+          if [ "$min_release_age" -le 0 ]; then
+            echo "min-release-age setting is not set to greater than 0"
+            exit 1
+          fi
+
+          # Check "before = date" exists
+          before_date=$(npm config get before)
+          if [ -z "$before_date" ]; then
+            echo "before setting is not present in npm config"
+            exit 1
+          fi
 
       - name: Install dependencies
         run: npm ci
