@@ -52,6 +52,12 @@ jobs:
 
       - name: Check min-release-age setting
         run: |
+          # Check if .npmrc file exists
+          if [ ! -f .npmrc ]; then
+            echo ".npmrc file not found"
+            exit 1
+          fi
+
           # Check if min-release-age line is present in npm config
           if ! grep -q "min-release-age" .npmrc; then
             echo "min-release-age setting is not present in npm config"
