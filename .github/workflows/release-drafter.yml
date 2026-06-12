@@ -22,7 +22,7 @@ jobs:
     concurrency:
       group: ci-release-drafter
       cancel-in-progress: false
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
         if: ${{ inputs.harden-runner }}
