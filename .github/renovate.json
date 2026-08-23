@@ -1,28 +1,5 @@
 {
   "extends": [
     "github>harryzcy/renovate-config"
-  ],
-  "packageRules": [
-    {
-      "matchManagers": [
-        "custom.regex"
-      ],
-      "automerge": false
-    }
-  ],
-  "customManagers": [
-    {
-      "customType": "regex",
-      "managerFilePatterns": [
-        "/^\\.github\\/workflows\\/.*\\.ya?ml$/"
-      ],
-      "matchStrings": [
-        "node-version: ['\"]?(?<currentValue>.*)['\"]?"
-      ],
-      "depNameTemplate": "node",
-      "datasourceTemplate": "docker",
-      "versioningTemplate": "regex:^(?<major>\\d+)$",
-      "extractVersionTemplate": "^(?<version>v\\d+)"
-    }
   ]
 }
