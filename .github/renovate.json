@@ -4,25 +4,11 @@
   ],
   "packageRules": [
     {
-      "matchManagers": [
-        "custom.regex"
+      "matchPackageNames": [
+        "actions/go-versions",
+        "actions/node-versions"
       ],
       "automerge": false
-    }
-  ],
-  "customManagers": [
-    {
-      "customType": "regex",
-      "managerFilePatterns": [
-        "/^\\.github\\/workflows\\/.*\\.ya?ml$/"
-      ],
-      "matchStrings": [
-        "node-version: ['\"]?(?<currentValue>.*)['\"]?"
-      ],
-      "depNameTemplate": "node",
-      "datasourceTemplate": "docker",
-      "versioningTemplate": "regex:^(?<major>\\d+)$",
-      "extractVersionTemplate": "^(?<version>v\\d+)"
     }
   ]
 }
