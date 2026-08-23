@@ -1,14 +1,5 @@
 {
   "extends": [
     "github>harryzcy/renovate-config"
-  ],
-  "packageRules": [
-    {
-      "matchPackageNames": [
-        "actions/go-versions",
-        "actions/node-versions"
-      ],
-      "automerge": false
-    }
   ]
 }
