@@ -91,12 +91,13 @@ jobs:
           tr '\0' '\n' <"$zsh_files"
           echo "::endgroup::"
 
+      # ShellCheck doesn't support zsh: https://github.com/koalaman/shellcheck/issues/809
       - name: Run ShellCheck on sh/bash scripts
         run: |
           shellcheck --version
           xargs -0r shellcheck -x <"$RUNNER_TEMP/sh-files"
 
-      # ShellCheck doesn't support zsh, so zsh scripts only get a syntax check
+      # shfmt only provides a syntax check
       - name: Check zsh syntax
         if: ${{ !cancelled() && steps.find.outcome == 'success' }}
         run: |
