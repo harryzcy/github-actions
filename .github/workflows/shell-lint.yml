@@ -17,10 +17,14 @@ permissions:
   contents: read
 
 env:
-  # renovate: datasource=github-releases depName=koalaman/shellcheck
+  # SHA-256 of the linux x86_64 release asset
+  # renovate-digest: depName=koalaman/shellcheck
   SHELLCHECK_VERSION: v0.11.0
-  # renovate: datasource=github-releases depName=mvdan/sh
+  SHELLCHECK_SHA256: 8c3be12b05d5c177a04c29e3c78ce89ac86f1595681cab149b65b97c4e227198
+  # SHA-256 of the linux amd64 release asset
+  # renovate-digest: depName=mvdan/sh
   SHFMT_VERSION: v3.14.1
+  SHFMT_SHA256: 76e77641faa025814b77f153b29796b8e6fa2fca03e0c76a691608b86c7ea7bf
 
 jobs:
   lint:
@@ -44,11 +48,19 @@ jobs:
       - name: Install ShellCheck and shfmt
         run: |
           bin="$RUNNER_TEMP/bin"
-          mkdir -p "$bin"
-          curl -fsSL "https://github.com/koalaman/shellcheck/releases/download/${SHELLCHECK_VERSION}/shellcheck-${SHELLCHECK_VERSION}.linux.x86_64.tar.xz" |
-            tar -xJ -C "$bin" --strip-components=1 "shellcheck-${SHELLCHECK_VERSION}/shellcheck"
-          curl -fsSL -o "$bin/shfmt" "https://github.com/mvdan/sh/releases/download/${SHFMT_VERSION}/shfmt_${SHFMT_VERSION}_linux_amd64"
-          chmod +x "$bin/shfmt"
+          dl="$RUNNER_TEMP/download"
+          mkdir -p "$bin" "$dl"
+          curl -fsSL -o "$dl/shellcheck.tar.xz" "https://github.com/koalaman/shellcheck/releases/download/${SHELLCHECK_VERSION}/shellcheck-${SHELLCHECK_VERSION}.linux.x86_64.tar.xz"
+          curl -fsSL -o "$dl/shfmt" "https://github.com/mvdan/sh/releases/download/${SHFMT_VERSION}/shfmt_${SHFMT_VERSION}_linux_amd64"
+
+          # Neither project publishes checksums, so the expected digests are pinned above
+          printf '%s  %s\n' \
+            "$SHELLCHECK_SHA256" "$dl/shellcheck.tar.xz" \
+            "$SHFMT_SHA256" "$dl/shfmt" |
+            sha256sum --check --strict
+
+          tar -xJ -f "$dl/shellcheck.tar.xz" -C "$bin" --strip-components=1 "shellcheck-${SHELLCHECK_VERSION}/shellcheck"
+          install -m 755 "$dl/shfmt" "$bin/shfmt"
           echo "$bin" >>"$GITHUB_PATH"
 
       - name: Find shell scripts
