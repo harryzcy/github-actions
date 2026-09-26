@@ -1,0 +1,105 @@
+name: Shell Lint
+
+on:
+  workflow_call:
+    inputs:
+      harden-runner:
+        description: "Harden runner"
+        required: false
+        type: boolean
+        default: true
+      exclude:
+        description: "Extended regex of file paths to skip"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  # renovate: datasource=github-releases depName=koalaman/shellcheck
+  SHELLCHECK_VERSION: v0.11.0
+  # renovate: datasource=github-releases depName=mvdan/sh
+  SHFMT_VERSION: v3.14.1
+
+jobs:
+  lint:
+    name: Shell Lint
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        if: ${{ inputs.harden-runner }}
+        with:
+          disable-sudo: true
+          egress-policy: block
+          allowed-endpoints: >
+            github.com:443
+            objects.githubusercontent.com:443
+            release-assets.githubusercontent.com:443
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install ShellCheck and shfmt
+        run: |
+          bin="$RUNNER_TEMP/bin"
+          mkdir -p "$bin"
+          curl -fsSL "https://github.com/koalaman/shellcheck/releases/download/${SHELLCHECK_VERSION}/shellcheck-${SHELLCHECK_VERSION}.linux.x86_64.tar.xz" |
+            tar -xJ -C "$bin" --strip-components=1 "shellcheck-${SHELLCHECK_VERSION}/shellcheck"
+          curl -fsSL -o "$bin/shfmt" "https://github.com/mvdan/sh/releases/download/${SHFMT_VERSION}/shfmt_${SHFMT_VERSION}_linux_amd64"
+          chmod +x "$bin/shfmt"
+          echo "$bin" >>"$GITHUB_PATH"
+
+      - name: Find shell scripts
+        id: find
+        env:
+          EXCLUDE: ${{ inputs.exclude }}
+        run: |
+          sh_files="$RUNNER_TEMP/sh-files"
+          zsh_files="$RUNNER_TEMP/zsh-files"
+          : >"$sh_files"
+          : >"$zsh_files"
+
+          # The shebang decides the shell; the extension is only a fallback,
+          # since e.g. foo.sh may start with #!/usr/bin/env zsh
+          git ls-files -z |
+            if [[ -n "$EXCLUDE" ]]; then grep -zEv -- "$EXCLUDE"; else cat; fi |
+            while IFS= read -r -d '' f; do
+              [[ -f "$f" && ! -L "$f" ]] || continue
+              first=$(head -n1 "$f")
+              if [[ "$first" == '#!'* ]]; then
+                if grep -qE '\bzsh\b' <<<"$first"; then
+                  printf '%s\0' "$f" >>"$zsh_files"
+                elif grep -qE '\b(sh|bash|dash|ksh|bats)\b' <<<"$first"; then
+                  printf '%s\0' "$f" >>"$sh_files"
+                fi
+                continue
+              fi
+              case "$f" in
+                *.zsh | *.zshrc | *.zshenv | *.zprofile | *.zlogin | *.zlogout)
+                  printf '%s\0' "$f" >>"$zsh_files" ;;
+                *.sh | *.bash | *.bats | *.ksh)
+                  printf '%s\0' "$f" >>"$sh_files" ;;
+              esac
+            done
+
+          echo "::group::sh/bash scripts"
+          tr '\0' '\n' <"$sh_files"
+          echo "::endgroup::"
+          echo "::group::zsh scripts"
+          tr '\0' '\n' <"$zsh_files"
+          echo "::endgroup::"
+
+      # ShellCheck doesn't support zsh: https://github.com/koalaman/shellcheck/issues/809
+      - name: Run ShellCheck on sh/bash scripts
+        run: |
+          shellcheck --version
+          xargs -0r shellcheck -x <"$RUNNER_TEMP/sh-files"
+
+      # shfmt only provides a syntax check
+      - name: Check zsh syntax
+        if: ${{ !cancelled() && steps.find.outcome == 'success' }}
+        run: |
+          shfmt --version
+          xargs -0r shfmt -ln zsh <"$RUNNER_TEMP/zsh-files" >/dev/null

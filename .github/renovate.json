@@ -1,5 +1,6 @@
 {
   "extends": [
-    "github>harryzcy/renovate-config"
+    "github>harryzcy/renovate-config",
+    "customManagers:githubActionsVersions"
   ]
 }
