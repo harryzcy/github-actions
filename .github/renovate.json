@@ -2,5 +2,16 @@
   "extends": [
     "github>harryzcy/renovate-config",
     "customManagers:githubActionsVersions"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update release versions together with their pinned SHA-256 of the downloaded asset",
+      "managerFilePatterns": ["/(^|/)\\.github/workflows/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "# renovate-digest: depName=(?<depName>[^\\s]+?)\\s+[A-Za-z0-9_]+?_VERSION\\s*:\\s*[\"']?(?<currentValue>[^\\s\"']+)[\"']?\\s+[A-Za-z0-9_]+?_SHA256\\s*:\\s*[\"']?(?<currentDigest>[a-f0-9]{64})[\"']?\\s"
+      ],
+      "datasourceTemplate": "github-release-attachments"
+    }
   ]
 }
