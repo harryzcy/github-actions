@@ -18,7 +18,8 @@ jobs:
     if: github.repository_owner == 'harryzcy'
     permissions:
       contents: write
-      pull-requests: write
+      # Change to write if the autolabeler is used
+      pull-requests: read
     concurrency:
       group: ci-release-drafter
       cancel-in-progress: false
