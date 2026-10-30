@@ -15,7 +15,6 @@ permissions:
 jobs:
   update:
     name: Update
-    # Fork PRs get a read-only token, so creating the draft release fails
     if: >-
       github.repository_owner == 'harryzcy' &&
       (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
