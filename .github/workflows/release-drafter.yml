@@ -15,7 +15,9 @@ permissions:
 jobs:
   update:
     name: Update
-    if: github.repository_owner == 'harryzcy'
+    if: >-
+      github.repository_owner == 'harryzcy' &&
+      (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
     permissions:
       contents: write
       # Change to write if the autolabeler is used
